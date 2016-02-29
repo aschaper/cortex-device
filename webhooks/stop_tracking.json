@@ -1,0 +1,9 @@
+{
+  "event": "stop_tracking",
+  "url": "http://cortex-api.herokuapp.com/events/{{uuid}}/send_event_summary",
+  "requestType": "POST",
+  "headers": {
+    "Accepts": "application/json"
+  },
+  "mydevices": true
+}

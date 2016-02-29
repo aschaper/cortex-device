@@ -1,0 +1,10 @@
+{
+  "event": "start_tracking",
+  "url": "http://cortex-api.herokuapp.com/events",
+  "requestType": "POST",
+  "headers": {
+    "Accepts": "application/json"
+  },
+  "responseTemplate": "{{#event}}{{uuid}}{{/event}}",
+  "mydevices": true
+}

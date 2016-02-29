@@ -1,0 +1,15 @@
+{
+  "event": "save_results",
+  "url": "http://cortex-api.herokuapp.com/events/{{uuid}}/conditions",
+  "requestType": "POST",
+  "headers": {
+    "Accepts": "application/json"
+  },
+  "json": {
+    "temperature": "{{temperature}}",
+    "noise": "{{noise}}",
+    "light": "{{light}}",
+    "moved": "{{moved}}"
+  },
+  "mydevices": true
+}
