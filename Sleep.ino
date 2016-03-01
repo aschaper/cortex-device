@@ -51,6 +51,8 @@ void getTrackingUUID(const char *name, const char *data) {
   uuidJSON = "{\"uuid\":\"";
   uuidJSON.concat(uniqueIdentifier);
   uuidJSON.concat("\"}");
+
+  record();
 }
 
 void loop() {
@@ -70,7 +72,7 @@ void loop() {
 
        detectMovement();
 
-       if (currentMillis - previousMillis > 60000) {
+       if (currentMillis - previousMillis > 3600000) {
          previousMillis = currentMillis;
 
          record();
