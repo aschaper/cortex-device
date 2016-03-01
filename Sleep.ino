@@ -12,12 +12,12 @@
 DHT dht(dhtPin, DHT22);
 Adafruit_TSL2561_Unified tsl = Adafruit_TSL2561_Unified(TSL2561_ADDR_FLOAT, 12345);
 
-bool uniqueIdentifierSet = false;
 String uniqueIdentifier;
+String uuidJSON;
+bool uniqueIdentifierSet = false;
 bool currentlyTracking;
 int pirState = LOW;
 int previousMillis = 0;
-bool movementDetected = false;
 
 void setup() {
   Serial.begin(9600);
@@ -39,6 +39,7 @@ void setup() {
 void subscribeToWebhooks() {
   Spark.subscribe("hook-response/start_tracking", getTrackingUUID, MY_DEVICES);
   Spark.subscribe("hook-response/save_results", NULL);
+  Spark.subscribe("hook-response/save_movement", NULL);
 }
 
 void getTrackingUUID(const char *name, const char *data) {
@@ -46,6 +47,10 @@ void getTrackingUUID(const char *name, const char *data) {
 
   uniqueIdentifier = uuid;
   uniqueIdentifierSet = true;
+
+  uuidJSON = "{\"uuid\":\"";
+  uuidJSON.concat(uniqueIdentifier);
+  uuidJSON.concat("\"}");
 }
 
 void loop() {
@@ -63,15 +68,12 @@ void loop() {
      if (uniqueIdentifierSet) {
        int currentMillis = millis();
 
-       if (!movementDetected) {
-         detectMovement();
-       }
+       detectMovement();
 
        if (currentMillis - previousMillis > 60000) {
          previousMillis = currentMillis;
-         record();
 
-         movementDetected = false;
+         record();
        }
      }
    }
@@ -88,8 +90,6 @@ void record() {
   json.concat(String(noise));
   json.concat("\", \"light\":\"");
   json.concat(String(lux));
-  json.concat("\", \"moved\":\"");
-  json.concat(movementDetected);
   json.concat("\", \"uuid\":\"");
   json.concat(uniqueIdentifier);
   json.concat("\"}");
@@ -162,8 +162,9 @@ void detectMovement() {
 
   if (pirValue == HIGH) {
     if (pirState == LOW) {
-      movementDetected = true;
       pirState = HIGH;
+      Serial.println("movement detected!");
+      Spark.publish("save_movement", uuidJSON);
     }
   } else {
     if (pirState == HIGH) {

@@ -1,0 +1,9 @@
+{
+  "event": "save_movement",
+  "url": "http://cortex-api.herokuapp.com/events/{{uuid}}/movements",
+  "requestType": "POST",
+  "headers": {
+    "Accepts": "application/json"
+  },
+  "mydevices": true
+}
