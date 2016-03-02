@@ -38,6 +38,7 @@ void setup() {
 
 void subscribeToWebhooks() {
   Spark.subscribe("hook-response/start_tracking", getTrackingUUID, MY_DEVICES);
+  Spark.subscribe("hook-response/stop_tracking", NULL);
   Spark.subscribe("hook-response/save_results", NULL);
   Spark.subscribe("hook-response/save_movement", NULL);
 }
@@ -114,13 +115,13 @@ bool changeTrackingStatus() {
    currentlyTracking = true;
 
    Spark.publish("start_tracking");
-
    playStartedTrackingSound();
  }
 
  void stopTracking() {
    currentlyTracking = false;
 
+   Spark.publish("stop_tracking", uuidJSON);
    playStoppedTrackingSound();
  }
 
