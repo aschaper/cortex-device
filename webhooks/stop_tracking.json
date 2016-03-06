@@ -1,6 +1,6 @@
 {
   "event": "stop_tracking",
-  "url": "http://cortex-api.herokuapp.com/events/{{uuid}}/send_event_summary",
+  "url": "http://cortex-api.herokuapp.com/events/{{uuid}}/stop",
   "requestType": "POST",
   "headers": {
     "Accepts": "application/json"
